@@ -1,5 +1,0 @@
-1 | /home/puzzled-cat/Repos/ccrawler/ccrawler/ccrawler.py
-2 | /home/puzzled-cat/Repos/ccrawler/ccrawler/output.txt
-3 | /home/puzzled-cat/Repos/ccrawler/ccrawler/tests/test.py
-4 | /home/puzzled-cat/Repos/ccrawler/ccrawler/tests/__pycache__/test.cpython-313.pyc
-5 | /home/puzzled-cat/Repos/ccrawler/ccrawler/__pycache__/ccrawler.cpython-313.pyc
