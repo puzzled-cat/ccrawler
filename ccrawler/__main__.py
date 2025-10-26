@@ -1,7 +1,36 @@
 import os
 from pathlib import Path
 import re
+import argparse
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Recursively search directories for files matching a pattern."
+    )
+    parser.add_argument(
+        "directory",
+        nargs="?",
+        default=None,
+        help="Directory to scan (default: current directory or interactive prompt)"
+    )
+    parser.add_argument(
+        "query",
+        nargs="?",
+        default=None,
+        help="Search pattern with wildcard support (e.g., *.txt)"
+    )
+    parser.add_argument(
+            "-o", "--output",
+            default="output.txt",
+            help="Output file name (default: output.txt)"
+        )
+    parser.add_argument(
+        "-q", "--quiet",
+        action="store_true",
+        help="Suppress progress output"
+    )        
+    return parser.parse_args()
+        
 def get_valid_path(prompt):
     while True:
         user_input = input(prompt).strip()
@@ -21,22 +50,42 @@ def build_safe_search_regex(user_query: str) -> re.Pattern:
     return re.compile(q, re.IGNORECASE)
 
 def main():
-    open("output.txt", "w").close()
+    args = parse_args()
+    
+    # Handle directory argument
+    if args.directory is None:
+        PATH = get_valid_path("Enter directory to scan (press Enter for current): ")
+    else:
+        PATH = Path(args.directory).expanduser().resolve()
+        if not PATH.exists():
+            print(f"Error: Directory '{args.directory}' does not exist")
+            return
+    
+    # Handle query argument
+    if args.query is None:
+        SEARCH_QUERY = input("Enter search query: ").strip()
+    else:
+        SEARCH_QUERY = args.query
+    
+    # Use the output argument
+    output_file = args.output
+    open(output_file, "w").close()
+    
     FOUND = 0
-    PATH = get_valid_path("Enter directory to scan: ")
-    SEARCH_QUERY = input("Enter search query: ").strip()
     rx = build_safe_search_regex(SEARCH_QUERY)
     
-    with open("output.txt", "a") as fh:
-        for root, files in os.walk(PATH):
+    with open(output_file, "a") as fh:
+        for root, dirs, files in os.walk(PATH):
             for filename in files:
                 if rx.search(filename):
                     FOUND += 1
                     fh.write(f"{FOUND} | {Path(root) / filename}\n")
-                    print(f"[{FOUND}] Found: {filename}")
+                    if not args.quiet:
+                        print(f"[{FOUND}] Found: {filename}")
     
-    print(f"\nFound: {FOUND}")
-    print(f"Results saved to: {Path('output.txt').resolve()}")
+    if not args.quiet:
+        print(f"\nFound: {FOUND}")
+        print(f"Results saved to: {Path(output_file).resolve()}")
 
 if __name__ == "__main__":
     main()
