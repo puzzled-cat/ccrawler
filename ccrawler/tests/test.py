@@ -4,6 +4,12 @@ from pathlib import Path
 import tempfile
 from ccrawler.__main__ import parse_args, main, get_valid_path, build_safe_search_regex
 
+# Basic color codes
+RED = '\033[91m'
+GREEN = '\033[92m'
+BLUE = '\033[94m'
+RESET = '\033[0m'  # Resets color back to default
+
 class TestGetValidPath(unittest.TestCase):
     
     def test_valid_path_first_try(self):
@@ -21,7 +27,7 @@ class TestGetValidPath(unittest.TestCase):
                 with patch('builtins.print') as mock_print:
                     result = get_valid_path("Enter path: ")
                     self.assertEqual(result, Path(tmpdir).resolve())
-                    mock_print.assert_called_with("Path does not exist, try again.")
+                    mock_print.assert_called_with(f"{RED}[ERROR]{RESET} Path does not exist, try again.")
     
     def test_expands_tilde(self):
         """Test that ~ gets expanded to home directory"""
@@ -183,7 +189,7 @@ class TestMainFunction(unittest.TestCase):
         with patch('sys.argv', ['ccrawler', '/fake/nonexistent/path', '*.txt']):
             with patch('builtins.print') as mock_print:
                 main()
-                mock_print.assert_called_with("Error: Directory '/fake/nonexistent/path' does not exist")
+                mock_print.assert_called_with(f"{RED}[ERROR]{RESET} Directory '/fake/nonexistent/path' does not exist.")
     
     def test_main_interactive_mode(self):
         """Test main function in interactive mode"""
