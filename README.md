@@ -153,29 +153,6 @@ pipx uninstall ccrawler
 pip uninstall ccrawler
 ```
 
-## Roadmap
-
-### Enhanced Features
-- [ ] Add command-line arguments (skip interactive prompts)
-- [ ] Custom output file name/location option
-- [ ] Exclude patterns (ignore certain files/directories)
-- [ ] File size and date filtering
-- [ ] Search file contents, not just names
-
-### User Experience
-- [ ] Progress bar for large directories
-- [ ] Colorized terminal output
-- [ ] JSON/CSV output format options
-- [ ] Configuration file support (~/.ccrawlerrc)
-- [ ] Verbose/quiet modes
-
-### Production Ready
-- [ ] Comprehensive test suite
-- [ ] Performance benchmarks
-- [ ] Documentation website
-- [ ] PyPI package distribution
-- [ ] Windows/macOS/Linux binaries
-
 ## License
 MIT License - see LICENSE file for details
 
