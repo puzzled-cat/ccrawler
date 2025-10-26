@@ -117,6 +117,8 @@ By default, results are saved to `output.txt` in the directory where you run the
 2 | /full/path/to/file2.txt
 ```
 
+Both the name and the location of the output file can be changed via the -o argument as shown above
+
 ## Requirements
 - Python 3.8+
 - No external dependencies
