@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import re
 import argparse
+import time
 
 # Basic color codes
 RED = '\033[91m'
@@ -34,7 +35,12 @@ def parse_args():
         "-q", "--quiet",
         action="store_true",
         help="Suppress progress output"
-    )        
+    )
+    parser.add_argument(
+        "-b", "--benchmark",
+        action="store_true",
+        help="Show performance statistics"
+    )
     return parser.parse_args()
         
 def get_valid_path(prompt):
@@ -56,6 +62,7 @@ def build_safe_search_regex(user_query: str) -> re.Pattern:
 
 def main():
     args = parse_args()
+    start_time = time.time()
     
     # Handle directory argument
     if args.directory is None:
@@ -94,7 +101,14 @@ def main():
                         print(f"{BLUE}[{FOUND}] {RESET}{GREEN}Found:{RESET} {filename}")    
     
     print(f"\n{GREEN}[SUCCESS]{RESET} Found {FOUND} matching files.")
-    print(f"{BLUE}[INFO]{RESET} Results saved to: {Path(output_file).resolve()}")
+    print(f"{BLUE}[INFO]{RESET} Results saved to: {Path(output_file).resolve()}\n")
+    
+    if args.benchmark:
+        elapsed = time.time() - start_time
+        files_per_sec = FOUND / elapsed if elapsed > 0 else 0
+        print(f"{BLUE}[INFO]{RESET} Time: {elapsed:.2f}s")
+        print(f"{BLUE}[INFO]{RESET} Files found: {FOUND}")
+        print(f"{BLUE}[INFO]{RESET} Speed: {files_per_sec:.0f} files/sec")
 
 
 if __name__ == "__main__":

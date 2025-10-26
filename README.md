@@ -110,6 +110,22 @@ ccrawler ~/Pictures "*.jpg" -o photos.txt
 - **Partial match**: `test*` - finds files starting with "test"
 - **Case insensitive**: Searches ignore case automatically
 
+## Performance
+
+ccrawler is optimized for speed with minimal overhead. Use the `--benchmark` flag to see performance metrics:
+```bash
+ccrawler ~/Projects "*.py" --benchmark
+```
+
+**Typical performance:**
+- ~20,000+ files/second on modern hardware
+- Sub-second response for most common use cases
+- I/O bound (limited by disk speed, not CPU)
+
+**Tips for faster searches:**
+- Use `--no-output` to skip writing results to a file
+- Combine with `-q` for minimal overhead: `ccrawler ~/code "*.js" --no-output -q --benchmark`
+
 ## Output
 By default, results are saved to `output.txt` in the directory where you run the command, with the format:
 ```
