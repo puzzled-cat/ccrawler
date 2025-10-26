@@ -4,7 +4,12 @@ import re
 
 def get_valid_path(prompt):
     while True:
-        p = Path(input(prompt).strip()).expanduser().resolve()
+        user_input = input(prompt).strip()
+        if user_input == "":
+            current_path = Path.cwd()
+            print(f"Using: [{current_path}]")
+            return current_path
+        p = Path(user_input).expanduser().resolve()
         if p.exists():
             return p
         print("Path does not exist, try again.")
@@ -23,7 +28,7 @@ def main():
     rx = build_safe_search_regex(SEARCH_QUERY)
     
     with open("output.txt", "a") as fh:
-        for root, dirs, files in os.walk(PATH):
+        for root, files in os.walk(PATH):
             for filename in files:
                 if rx.search(filename):
                     FOUND += 1
